@@ -1,11 +1,19 @@
-require('dotenv').config()
-var opn = require('opn');
 
-window = opn("https://uptownbuckhead.parkingattendant.com/lSQS_KvqoUGCPHRWgCftBQ/permits/temporary/new")
 
+const friends = {
+  "Henri": "abcd",
+  "Joe": "abcd",
+  "Moose": "abcd",
+  "Brian": "abcd",
+  "Alex": "abcd",
+  "Eli": "abcd",
+  "Jake": "abcd",
+}
 //License Plate 
-var license = document.getElementsByName('vehicle')[0];
-license.value = "ABCD";
+
+let friend = confirm('Who are you registering? ')
+let license = friends.friend
+console.log(friend + license)
 
 //Apartment
 var apartment = document.getElementsByName('tenant')[0];
@@ -34,3 +42,4 @@ button.click()
 //Form was getting a 403 on form.submit 
 // var form = document.getElementsByClassName("new permit ready")[0];
 // form.submit()
+`https://api.parkiq.io/v1/permits/temporary?ts=${new Date()}&send=false&location=lSQS_KvqoUGCPHRWgCftBQ&attendant=lSQS_KvqoUGCPHRWgCftBQ&vehicle=${license}&tenant=5212&token=2405&startDate=&duration=PT12H&email=&tel=`
