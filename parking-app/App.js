@@ -1,7 +1,13 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text, Card, ListItem, Button, CheckBox } from 'react-native-elements'
+import { StyleSheet, View, TouchableOpacity, Button } from 'react-native';
+import { Text, Card, ListItem, CheckBox } from 'react-native-elements'
 import friends from './friendsList'
+
+
+const baseUrl = "https://api.parkiq.io/v1/permits/temporary?"
+const apartment = "5212"
+const passcode = "2405"
+const duration = "PT12H"
 
 
 export default class App extends React.Component {
@@ -28,6 +34,7 @@ export default class App extends React.Component {
   }
 
   toggleChecked = (index) => {
+    console.log(index)
     let stateCopy = this.state.checked;
     console.log(`stateCopy: ${stateCopy}`)
     let toggler = (value) => {
@@ -42,6 +49,49 @@ export default class App extends React.Component {
     this.setState({checked: stateCopy})
   }
 
+  filterTrues = (arrayOfBooleans) => {
+    let arrayOfTrues = arrayOfBooleans.map((x, i) => {
+        if (x === true) {
+          return i
+        }
+        else {
+          return 
+        }
+    })
+    return arrayOfTrues.filter(value => value !== undefined)
+  }
+
+  sendRequest = () => {
+    let trueIndexes = this.filterTrues(this.state.checked)
+    console.log(trueIndexes)
+      trueIndexes.forEach((index) => {
+        let license = friends[index].license
+        let requestUrl = `${baseUrl}ts=${new Date()}&send=false&location=lSQS_KvqoUGCPHRWgCftBQ&attendant=lSQS_KvqoUGCPHRWgCftBQ&vehicle=${license}&tenant=${apartment}&token=${passcode}&startDate=&duration=${duration}&email=tdostilio@gmail.com&tel=2032410416`
+          return fetch(requestUrl, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }
+          }).then((res, error) => {
+            if (error) {
+              alert(error)
+              console.log(error)
+              return
+            }
+            if (res.status !== 201) {
+              alert(`Reservation failed: ${res.status}`)
+              return
+            }
+            alert(`Successful reservation of ${friends[index].name}`)
+        
+            // return fetch("https://api.parkiq.io/v1/send?ts=2018-03-11T18:22:26.162Z&container=rFg8QZ1J1UGT5l2dvsBOKA&to=tdostilio%40gmail.com&to=2032410416",  {
+            //   method: "POST"
+            // })
+          })
+        })
+  }
+
 
   renderPerson = (personArray) => {
     return personArray.map((x, i) => {
@@ -51,6 +101,7 @@ export default class App extends React.Component {
             title={x.name}
             checked={this.state.checked[i]}
             key={i}
+            value={x.license}
             onPress={() => this.toggleChecked(i)}
             style={{width: '50%'}}
           />
@@ -61,10 +112,17 @@ export default class App extends React.Component {
 
   render() {
     return (
+      
       <View style={styles.container}>
         <Text h2>Parcheggio</Text>
         <Text>Who are you registering?</Text>
-        {this.renderPerson(friends)}
+        {this.renderPerson(friends)}        
+        <TouchableOpacity style={styles.registerButton}>
+        <Button
+          onPress={this.sendRequest}
+          title='Register'
+        />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -78,4 +136,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginTop: '35%'
   },
+  registerButton: {
+    marginTop: '25%',
+
+  }
 });
