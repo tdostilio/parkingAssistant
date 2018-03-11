@@ -1,13 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Card, ListItem, Button, CheckBox } from 'react-native-elements'
+import friends from './friendsList'
 
-const friends = [
-  {"name": "Tom",
-  "license": "1234ABC"},
-  {"name": "Jim Bob",
-  "license": "1234ABC"},
-]
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,7 +17,7 @@ export default class App extends React.Component {
       return false
     })
     this.setState({checked: statusArray})
-    console.log( `Status arraey ${statusArray}`)
+    console.log( `Status array ${statusArray}`)
   }
 
   checkBool = (value) => {
@@ -57,6 +52,7 @@ export default class App extends React.Component {
             checked={this.state.checked[i]}
             key={i}
             onPress={() => this.toggleChecked(i)}
+            style={{width: '50%'}}
           />
         </View>
       )
@@ -68,7 +64,6 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Text h2>Parcheggio</Text>
         <Text>Who are you registering?</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
         {this.renderPerson(friends)}
       </View>
     );
