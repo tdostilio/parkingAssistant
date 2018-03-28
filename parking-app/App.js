@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Button } from 'react-native';
+import React from 'react'
+import { StyleSheet, View, TouchableOpacity, Button } from 'react-native'
 import { Text, Card, ListItem, CheckBox } from 'react-native-elements'
 import friends from './friendsList'
 
@@ -83,20 +83,42 @@ export default class App extends React.Component {
               alert(`Reservation failed: ${res.status}`)
               return
             }
-            alert(`Successful reservation of ${friends[index].name}`)
+            let olderUrl = res.headers.map.location[0]
+            let container = olderUrl.substring(olderUrl.indexOf("/p/") + 3);
+            let newDate = new Date()
+            console.log(newDate)
+            const secondUrl = `https://api.parkiq.io/v1/send?ts=${newDate}&container=${container}&to=tdostilio%40gmail.com`
+            console.log(`container=${container}`)
+            console.log(secondUrl)
+            return fetch(secondUrl, {
+              method: 'POST',
+              headers: {
+                Accept: 
+                'application/json',
+                'Content-Type': 'application/json',
+              }
+            }).then((res, error) => {
+              if (error) {
+                console.error(error)
+              }
+              console.log(`Sent second request`)
+              console.log(res.status)
+              console.log(res)
+            })
+            // alert(`Successful reservation of ${friends[index].name}`)
         
             // return fetch("https://api.parkiq.io/v1/send?ts=2018-03-11T18:22:26.162Z&container=rFg8QZ1J1UGT5l2dvsBOKA&to=tdostilio%40gmail.com&to=2032410416",  {
             //   method: "POST"
             // })
           })
-        })
+      })
   }
 
 
   renderPerson = (personArray) => {
     return personArray.map((x, i) => {
       return (
-        <View style={styles.personContainer}>
+        <View key={i} style={styles.personContainer}>
           <CheckBox 
             title={x.name}
             checked={this.state.checked[i]}
@@ -141,3 +163,6 @@ const styles = StyleSheet.create({
 
   }
 });
+
+//https://api.parkiq.io/v1/send?ts=2018-03-27T23:40:35.313Z&container=JUCvQ8cYxUqojchXEuLb2g&to=tdostilio%40gmail.com
+//https://api.parkiq.io/v1/send?ts=Tue%20Mar%2027%202018%2023:44:49%20GMT-0400%20(EDT)&container=mXrni3ujske7Pw1ZC3d4TQ&to=tdostilio%2540gmail.com
