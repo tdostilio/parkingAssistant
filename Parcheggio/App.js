@@ -87,7 +87,7 @@ export default class App extends React.Component {
             let container = olderUrl.substring(olderUrl.indexOf("/p/") + 3);
             let newDate = new Date()
             console.log(newDate)
-            const secondUrl = `https://api.parkiq.io/v1/send?ts=${newDate}&container=${container}&to=tdostilio%40gmail.com`
+            const secondUrl = `https://api.parkiq.io/v1/send?ts=${newDate}&container=${container}&to=tdostilio@gmail.com`
             console.log(`container=${container}`)
             console.log(secondUrl)
             return fetch(secondUrl, {
