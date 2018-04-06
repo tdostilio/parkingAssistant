@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, Button } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Button, TextInput } from 'react-native'
 import { Text, Card, ListItem, CheckBox } from 'react-native-elements'
+import { AppLoading, Font } from 'expo'
 import friends from './friendsList'
 
 
@@ -15,10 +16,13 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       checked: [],
+      isReady: false,
+      text: ''
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.loadFonts()
     let statusArray = friends.map((x, i) => {
       return false
     })
@@ -26,6 +30,10 @@ export default class App extends React.Component {
     console.log( `Status array ${statusArray}`)
   }
 
+  loadFonts = async () => {
+    await Font.loadAsync({'Satisfy': require('./assets/Satisfy/Satisfy-Regular.ttf')})
+    this.setState({isReady: true})
+  }
   checkBool = (value) => {
     if (value === "false") {
       return false
@@ -129,16 +137,18 @@ export default class App extends React.Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return ( <AppLoading/>)
+    }
     return (
-      
       <View style={styles.container}>
         <Text h1 style={styles.title}>Parcheggio</Text>
         <Text style={styles.subtitle}>Who are you registering?</Text>
-        {this.renderPerson(friends)}        
+        {this.renderPerson(friends)} 
         <TouchableOpacity onPress={this.sendRequest} style={styles.buttonContainer}>
-        <Text style={styles.registerButton} >
-          Register
-        </Text>
+            <Text style={styles.registerButton} >
+              Register
+            </Text>
         </TouchableOpacity>
       </View>
     );
@@ -152,16 +162,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#96939B',
-    borderWidth: 1,
-    borderColor: 'red',
   },
   title: {
     marginTop: '20%',
     color: '#F9DC5C',
+    fontFamily: 'Satisfy',
   },
   subtitle: {
     marginTop: '5%',
+    fontSize: 20,
     color: '#F9DC5C',
+    fontFamily: 'Satisfy',
   },
   checkBox: {
     width: '75%',
@@ -174,25 +185,30 @@ const styles = StyleSheet.create({
   personContainer: {
     width: '60%',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'red',
+  },
+  textInput: {
+    height: 40, 
+    width: 200, 
+    backgroundColor: 'white', 
   },
   buttonContainer: {
     marginTop: '10%',
-    justifyContent: 'center',
-    alignContent: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     height: '10%',
-    borderWidth: 1,
-    borderColor: 'red',
-    padding: 5,
-    marginBottom: '20%',
+    width: '50%',
+    // padding: 5,
+    // marginBottom: '20%',
   },
   registerButton: {
-    borderWidth: 1,
-    borderColor: 'red',
-    fontSize: 20,
+    marginTop: '10%',
+    // height: '100%',
+    fontSize: 30,
     color: '#F9DC5C',
-    height: '100%',
+    height: 60,
+    fontFamily: 'Satisfy',
+    justifyContent: 'center',
+    alignContent: 'center',
   },
 });
 
